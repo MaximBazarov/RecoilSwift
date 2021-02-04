@@ -13,11 +13,8 @@ public class Atom<T: Codable>: ObservableObject {
         self.initial = initial
     }
 
-    private init(value: T) {
-        self.initial = { value }
-    }
-
     public let objectWillChange = ObservableObjectPublisher()
+
     private var initial: () -> T
 
     private lazy var _value: T = initial() {
