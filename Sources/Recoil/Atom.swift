@@ -4,6 +4,8 @@ import SwiftUI
 
 public class Atom<T: Codable>: ObservableObject {
 
+    public let id = UUID()
+
     public var value: T {
         get { _value }
         set { _value = newValue }
