@@ -1,27 +1,19 @@
 import Foundation
 
-public class Family<ID: Hashable, T: Codable> {
+public class AtomFamily<ID: Hashable, T: Codable> {
+    subscript(key: ID) -> Atom<T> {
+        if atoms[key] == nil {
+            atoms[key] = Atom { self.initial(key) }
+        }
+        return atoms[key]!
+    }
 
-    public init(initial: @escaping () -> T) {
+    public init(initial: @escaping (ID) -> T) {
         self.initial = initial
     }
 
-    /// Returns the atom for provided id **or creates a new one and returns
-    /// - Parameter id: id to obtain the atom
-    /// - Returns: Atom stored for the id or a new atom
-    ///
-    public func at(id: ID) -> Atom<T> {
-        guard let atom = atoms[id] else {
-            let atom = Atom(initial: initial)
-            atoms[id] = atom
-            return atom
-        }
-        return atom
-    }
-
-    private var atoms = [ID: Atom<T>]()
-    private var initial: () -> T
-
+    private let initial: (ID) -> T
+    private var atoms: [ID: Atom<T>] = [:]
 }
 
 
