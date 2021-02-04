@@ -1,12 +1,12 @@
 import Combine
 
-class Source<T: Codable>: ObservableObject {
+class Source<ID, Hashable, T: Codable>: ObservableObject {
     let objectWillChange: ObservableObjectPublisher
     var valueProvider: () -> T
     
     var value: T { valueProvider() }
     
-    init(atom: Atom<T>) {
+    init(atom: Atom<ID, T>) {
         self.objectWillChange = atom.objectWillChange
         self.valueProvider = { atom.value }
     }
