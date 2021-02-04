@@ -2,7 +2,7 @@ import Foundation
 
 public class Family<ID: Hashable, T: Codable> {
 
-    public init(initial: @escaping () -> Atom<T>) {
+    public init(initial: @escaping () -> T) {
         self.initial = initial
     }
 
@@ -12,7 +12,7 @@ public class Family<ID: Hashable, T: Codable> {
     ///
     public func at(id: ID) -> Atom<T> {
         guard let atom = atoms[id] else {
-            let atom = initial()
+            let atom = Atom(initial: initial)
             atoms[id] = atom
             return atom
         }
@@ -20,7 +20,7 @@ public class Family<ID: Hashable, T: Codable> {
     }
 
     private var atoms = [ID: Atom<T>]()
-    private var initial: () -> Atom<T>
+    private var initial: () -> T
 
 }
 
