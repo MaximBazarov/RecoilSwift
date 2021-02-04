@@ -1,7 +1,8 @@
 import Foundation
 
 public class AtomFamily<ID: Hashable, T: Codable> {
-    subscript(key: ID) -> Atom<T> {
+
+    public subscript(key: ID) -> Atom<T> {
         if atoms[key] == nil {
             atoms[key] = Atom { self.initial(key) }
         }
