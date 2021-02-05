@@ -4,11 +4,22 @@ import SwiftUI
 
 public class Atom<T: Codable>: ObservableObject {
 
-    public let id = UUID()
-    
-    public init(initial: () -> T) {
-        self.value = initial()
+    public var value: T {
+        get { _value }
+        set { _value = newValue }
     }
-    
-    @Published public var value: T
+
+    public init(initial: @escaping () -> T) {
+        self.initial = initial
+    }
+
+    public let objectWillChange = ObservableObjectPublisher()
+
+    private var initial: () -> T
+
+    private lazy var _value: T = initial() {
+        willSet {
+            objectWillChange.send()
+        }
+    }
 }

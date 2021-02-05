@@ -1,24 +1,20 @@
 import Foundation
 
-public class Family<ID: Hashable, T: Codable> {
+public class AtomFamily<ID: Hashable, T: Codable> {
 
-    private var items = [ID: Atom<T>]()
-    
-    public init() {
-    }
-    
-    public func append(id: ID, value: () -> T) {
-        let atom = Atom { value() }
-        items[id] = atom
-    }
-    
-    public func at(id: ID) -> Atom<T>? {
-        guard let atom = items[id] else {
-            return nil
+    public subscript(key: ID) -> Atom<T> {
+        if atoms[key] == nil {
+            atoms[key] = Atom { self.initial(key) }
         }
-        
-        return atom
+        return atoms[key]!
     }
+
+    public init(initial: @escaping (ID) -> T) {
+        self.initial = initial
+    }
+
+    private let initial: (ID) -> T
+    private var atoms: [ID: Atom<T>] = [:]
 }
 
 

@@ -19,14 +19,14 @@ public class Selector<T>: ObservableObject {
 
 public class Getter {
     private let sink: () -> ()
-    fileprivate var dependencies = [UUID: AnyCancellable]()
+    fileprivate var dependencies = [ObjectIdentifier: AnyCancellable]()
     
     init(sink: @escaping () -> ()) {
         self.sink = sink
     }
     
     public func callAsFunction<T>(_ atom: Atom<T>) -> T {
-        dependencies[atom.id] = atom.objectWillChange.sink {
+        dependencies[ObjectIdentifier(atom)] = atom.objectWillChange.sink {
             self.sink()
         }
         
